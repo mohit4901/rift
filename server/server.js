@@ -1,3 +1,5 @@
+
+
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
@@ -20,12 +22,19 @@ app.use(cors({
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
 
+app.get('/', (req, res) => {
+  res.send('🚀 RIFT Eye Backend Running on Port 5050');
+});
+
 app.use('/api', healthRoutes);
 app.use('/api', analysisRoutes);
 
 app.use(errorHandler);
 
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => logger.info(`RIFT 2026 server running on port ${PORT}`));
+const PORT = process.env.PORT || 5050;
+
+app.listen(PORT, () => {
+  logger.info(`🔥 RIFT 2026 server running on port ${PORT}`);
+});
 
 module.exports = app;
