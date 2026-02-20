@@ -1,110 +1,84 @@
 // ============================
-// FileUploader.jsx (FIXED WORKING VERSION)
+// FileUploader.jsx (CLEAN MINIMAL VERSION)
 // ============================
 
 import { useState, useRef } from "react";
-import { motion } from "framer-motion";
 import { useUpload } from "../hooks/useUpload";
 
 export default function FileUploader() {
   const [file, setFile] = useState(null);
-  const [dragging, setDragging] = useState(false);
+  const inputRef = useRef(null);
   const { uploadFile } = useUpload();
 
-  // 🔥 IMPORTANT — direct input trigger
-  const inputRef = useRef(null);
-
-  const handleDrop = (e) => {
-    e.preventDefault();
-    setDragging(false);
-
-    const dropped = e.dataTransfer.files?.[0];
-    if (dropped && dropped.name.endsWith(".csv")) {
-      setFile(dropped);
-    }
-  };
-
-  const openFilePicker = () => {
+  const openPicker = () => {
     inputRef.current?.click();
   };
 
   return (
-    <div className="w-full max-w-xl mx-auto">
+    <div className="w-full">
 
-      {/* ================= DROP ZONE ================= */}
-      <motion.div
-        whileHover={{ scale: 1.02 }}
-        onClick={openFilePicker}
-        className={`
-          flex flex-col items-center justify-center
-          border-2 border-dashed rounded-2xl
-          p-8 text-center cursor-copy
-          transition-all duration-300 select-none
-          ${dragging
-            ? "border-purple-500 bg-purple-900/20"
-            : "border-purple-700 bg-[#060012]"
-          }
-        `}
-        onDragOver={(e) => {
-          e.preventDefault();
-          setDragging(true);
-        }}
-        onDragLeave={() => setDragging(false)}
-        onDrop={handleDrop}
+      {/* ================= DROP AREA ================= */}
+      <div
+        onClick={openPicker}
+        className="
+          border border-[#e5e7eb]
+          rounded-xl
+          px-6 py-10
+          text-center
+          cursor-pointer
+          bg-[#fafafa]
+          hover:border-[#c4b5fd]
+          hover:bg-[#f5f3ff]
+          transition-all
+          duration-200
+        "
       >
-        {/* Hidden Input */}
         <input
           ref={inputRef}
           type="file"
           accept=".csv"
           className="hidden"
-          onChange={(e) => {
-            const selected = e.target.files?.[0];
-            if (selected) setFile(selected);
-          }}
+          onChange={(e) => setFile(e.target.files?.[0])}
         />
 
-        {/* Icon */}
-        <div className="text-4xl mb-3">📂</div>
+        <div className="text-3xl mb-2">📄</div>
 
-        {/* Main Text */}
-        <p className="text-purple-300 font-semibold">
-          Click to choose CSV or Drag & Drop
+        <p className="text-sm font-semibold text-[#374151]">
+          Click to choose CSV file
         </p>
 
-        <p className="text-xs text-purple-400 mt-1">
-          Upload transaction dataset for graph analysis
+        <p className="text-xs text-[#9ca3af] mt-1">
+          Upload transaction dataset for analysis
         </p>
 
-        {/* File Preview */}
         {file && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="mt-4 px-4 py-2 bg-black/40 rounded-lg text-sm border border-purple-700"
-          >
+          <div className="mt-4 text-xs bg-white border rounded-lg px-3 py-2 inline-block">
             ✅ {file.name}
-          </motion.div>
+          </div>
         )}
-      </motion.div>
+      </div>
 
-      {/* ================= UPLOAD BUTTON ================= */}
-      <motion.button
-        whileHover={{ scale: file ? 1.05 : 1 }}
-        whileTap={{ scale: file ? 0.96 : 1 }}
+      {/* ================= SUBMIT BUTTON ================= */}
+      <button
         disabled={!file}
+        onClick={() => uploadFile(file)}
         className={`
-          w-full mt-6 py-3 rounded-xl font-semibold tracking-wide
-          transition-all duration-300
-          ${file
-            ? "bg-gradient-to-r from-purple-600 to-pink-600 text-white cursor-pointer shadow-lg shadow-purple-500/30"
-            : "bg-gray-700 text-gray-400 cursor-not-allowed"
+          w-full mt-6
+          py-3
+          rounded-lg
+          font-semibold
+          text-sm
+          transition-all
+          duration-200
+          ${
+            file
+              ? "bg-[#7c3aed] text-white hover:bg-[#6d28d9] cursor-pointer shadow-sm"
+              : "bg-[#e5e7eb] text-[#9ca3af] cursor-not-allowed"
           }
         `}
-        onClick={() => uploadFile(file)}
       >
-        🚀 Analyze Financial Graph
-      </motion.button>
+        Submit
+      </button>
     </div>
   );
 }
