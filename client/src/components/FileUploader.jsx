@@ -1,8 +1,8 @@
 // ============================
-// FileUploader.jsx (UPGRADED UI)
+// FileUploader.jsx (FIXED WORKING VERSION)
 // ============================
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { motion } from "framer-motion";
 import { useUpload } from "../hooks/useUpload";
 
@@ -11,24 +11,35 @@ export default function FileUploader() {
   const [dragging, setDragging] = useState(false);
   const { uploadFile } = useUpload();
 
+  // 🔥 IMPORTANT — direct input trigger
+  const inputRef = useRef(null);
+
   const handleDrop = (e) => {
     e.preventDefault();
     setDragging(false);
-    const dropped = e.dataTransfer.files[0];
-    if (dropped) setFile(dropped);
+
+    const dropped = e.dataTransfer.files?.[0];
+    if (dropped && dropped.name.endsWith(".csv")) {
+      setFile(dropped);
+    }
+  };
+
+  const openFilePicker = () => {
+    inputRef.current?.click();
   };
 
   return (
     <div className="w-full max-w-xl mx-auto">
 
       {/* ================= DROP ZONE ================= */}
-      <motion.label
+      <motion.div
         whileHover={{ scale: 1.02 }}
+        onClick={openFilePicker}
         className={`
           flex flex-col items-center justify-center
           border-2 border-dashed rounded-2xl
           p-8 text-center cursor-copy
-          transition-all duration-300
+          transition-all duration-300 select-none
           ${dragging
             ? "border-purple-500 bg-purple-900/20"
             : "border-purple-700 bg-[#060012]"
@@ -43,18 +54,22 @@ export default function FileUploader() {
       >
         {/* Hidden Input */}
         <input
+          ref={inputRef}
           type="file"
           accept=".csv"
           className="hidden"
-          onChange={(e) => setFile(e.target.files[0])}
+          onChange={(e) => {
+            const selected = e.target.files?.[0];
+            if (selected) setFile(selected);
+          }}
         />
 
         {/* Icon */}
-        <div className="text-4xl mb-3 select-none">📂</div>
+        <div className="text-4xl mb-3">📂</div>
 
         {/* Main Text */}
         <p className="text-purple-300 font-semibold">
-          Choose CSV file or Drag & Drop here
+          Click to choose CSV or Drag & Drop
         </p>
 
         <p className="text-xs text-purple-400 mt-1">
@@ -71,12 +86,12 @@ export default function FileUploader() {
             ✅ {file.name}
           </motion.div>
         )}
-      </motion.label>
+      </motion.div>
 
       {/* ================= UPLOAD BUTTON ================= */}
       <motion.button
-        whileHover={{ scale: 1.05 }}
-        whileTap={{ scale: 0.96 }}
+        whileHover={{ scale: file ? 1.05 : 1 }}
+        whileTap={{ scale: file ? 0.96 : 1 }}
         disabled={!file}
         className={`
           w-full mt-6 py-3 rounded-xl font-semibold tracking-wide
