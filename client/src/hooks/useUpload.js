@@ -1,13 +1,12 @@
 import { uploadCSV } from "../api/apiClient";
 import { useAnalysis } from "../context/AnalysisContext";
-import { useNavigate } from "react-router-dom";
 
 /**
- * 🔥 FINAL UPGRADED UPLOAD HOOK (WITH REDIRECT + LOADER FLOW)
+ * 🔥 FINAL STABLE UPLOAD HOOK
+ * (STATE BASED NAVIGATION — NO ROUTER)
  */
 
 export const useUpload = () => {
-  const navigate = useNavigate();
 
   const {
     setResult,
@@ -19,7 +18,7 @@ export const useUpload = () => {
   } = useAnalysis();
 
   // ============================================================
-  // 🤖 GEMINI FREE RAG EXPLAINABILITY
+  // 🤖 GEMINI EXPLAINABILITY
   // ============================================================
   const runGeminiExplanation = async (result) => {
     try {
@@ -68,48 +67,29 @@ Explain money muling behaviour in 2 short lines.
     if (!file) return;
 
     try {
-      // 🔥 GLOBAL LOADER START
       setLoading(true);
 
       const data = await uploadCSV(file);
 
-      // ======================================
-      // 🔥 CORE BACKEND RESPONSE
-      // ======================================
       setResult(data.result);
       setGraphData(data.graphData);
 
-      // ======================================
-      // 🔥 PERFORMANCE PANEL
-      // ======================================
       if (data?.result?.summary) {
         setPerformance(data.result.summary);
       }
 
-      // ======================================
-      // 🔥 CSV SKIPPED ROWS UI
-      // ======================================
       if (data?.skipped_rows?.length) {
-        console.warn("CSV rows skipped:", data.skipped_rows);
         setSkippedRows(data.skipped_rows);
       } else {
         setSkippedRows([]);
       }
 
-      // ======================================
-      // 🤖 GEMINI AI EXPLAINABILITY (NON BLOCKING)
-      // ======================================
+      // NON BLOCKING AI
       runGeminiExplanation(data.result);
-
-      // ==================================================
-      // 🔥🔥 IMPORTANT — DASHBOARD REDIRECT AFTER SUCCESS
-      // ==================================================
-      navigate("/dashboard");
 
     } catch (e) {
       console.error("Upload failed:", e);
     } finally {
-      // 🔥 GLOBAL LOADER STOP
       setLoading(false);
     }
   };
