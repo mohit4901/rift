@@ -112,11 +112,11 @@ O(V + E)
 Each account receives a normalized suspicion score between 0 and 100.
 ## Score Components
 # Factor	                       Weight
-•⁠  ⁠Participation in Fraud Ring	    +40
-•⁠  ⁠Smurf Aggregation	                +25
-•⁠  ⁠Shell Chain Depth	                +20
-•⁠  ⁠High Transaction Frequency	    +10
-•⁠  ⁠Abnormal Flow Patterns	        +5
+•⁠  ⁠Participation in Fraud Ring	   +40
+•⁠  ⁠Smurf Aggregation	             +25
+•⁠  ⁠Shell Chain Depth	             +20
+•⁠  ⁠High Transaction Frequency	     +10
+•⁠  ⁠Abnormal Flow Patterns	         +5
 
 # Formula
 Score = Σ (Pattern Weights)
@@ -130,8 +130,6 @@ Additional Notes:
 ### Installation and Setup:
 
 1.⁠ ⁠Clone Repository
-git clone https://github.com/your-repo/rift-eye.git
-cd rift-eye
 
 2.⁠ ⁠Install Dependencies
 npm install
@@ -139,14 +137,12 @@ npm install
 3.⁠ ⁠Run Backend
 npm start
 Server runs on:
-http://localhost:5000
+http://localhost:5050
 
 4.⁠ ⁠Run Frontend
 cd client
 npm install
 npm start
-Frontend runs on:
-http://localhost:3000
 
 ### Usage Instructions:
 
