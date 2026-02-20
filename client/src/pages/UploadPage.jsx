@@ -197,7 +197,7 @@ export default function UploadPage() {
               boxShadow:"0 4px 14px rgba(124,58,237,0.3)"
             }}
           >
-            Submit CSV
+            Submit 
           </motion.a>
         </div>
 
