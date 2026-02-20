@@ -9,7 +9,7 @@ export const uploadCSV = async (file) => {
   formData.append("file", file);
 
   // ✅ CORRECT BACKEND ROUTE
-  const res = await api.post("/analyze", formData, {
+  const res = await api.post("/api/analyze", formData, {
     headers: { "Content-Type": "multipart/form-data" },
   });
 
