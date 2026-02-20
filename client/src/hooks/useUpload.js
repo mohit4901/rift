@@ -1,25 +1,21 @@
 import { uploadCSV } from "../api/apiClient";
 import { useAnalysis } from "../context/AnalysisContext";
+import { useNavigate } from "react-router-dom";
 
 /**
- * 🔥 FINAL UPGRADED UPLOAD HOOK
- *
- * Handles:
- * - result
- * - graphData
- * - performance summary
- * - skipped CSV rows (NEW)
- * - Gemini RAG explainability
+ * 🔥 FINAL UPGRADED UPLOAD HOOK (WITH REDIRECT + LOADER FLOW)
  */
 
 export const useUpload = () => {
+  const navigate = useNavigate();
+
   const {
     setResult,
     setGraphData,
     setLoading,
     setPerformance,
     setAiExplanation,
-    setSkippedRows, // ✅ NEW (IMPORTANT)
+    setSkippedRows,
   } = useAnalysis();
 
   // ============================================================
@@ -72,6 +68,7 @@ Explain money muling behaviour in 2 short lines.
     if (!file) return;
 
     try {
+      // 🔥 GLOBAL LOADER START
       setLoading(true);
 
       const data = await uploadCSV(file);
@@ -90,7 +87,7 @@ Explain money muling behaviour in 2 short lines.
       }
 
       // ======================================
-      // 🔥 NEW — CSV SKIPPED ROWS UI
+      // 🔥 CSV SKIPPED ROWS UI
       // ======================================
       if (data?.skipped_rows?.length) {
         console.warn("CSV rows skipped:", data.skipped_rows);
@@ -100,13 +97,19 @@ Explain money muling behaviour in 2 short lines.
       }
 
       // ======================================
-      // 🤖 GEMINI AI EXPLAINABILITY
+      // 🤖 GEMINI AI EXPLAINABILITY (NON BLOCKING)
       // ======================================
       runGeminiExplanation(data.result);
+
+      // ==================================================
+      // 🔥🔥 IMPORTANT — DASHBOARD REDIRECT AFTER SUCCESS
+      // ==================================================
+      navigate("/dashboard");
 
     } catch (e) {
       console.error("Upload failed:", e);
     } finally {
+      // 🔥 GLOBAL LOADER STOP
       setLoading(false);
     }
   };
