@@ -1,6 +1,4 @@
-// ============================
-// App.jsx — FINAL WITH LOADER
-// ============================
+
 
 import UploadPage from "./pages/UploadPage";
 import Dashboard from "./pages/Dashboard";
