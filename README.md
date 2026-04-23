@@ -1,202 +1,176 @@
-### RIFT EYE – Real-Time Illicit Financial Tracking
+<div align="center">
 
-Advanced Graph-Based Fraud Ring and Suspicious Transaction Detection System
+# RIFT EYE
+### Advanced Financial Intelligence & Fraud Graph Analytics
 
-### Live Demo:
-Frontend Dashboard:
-https://rift-hackathon-puce.vercel.app
+[![Backend Status](https://img.shields.io/badge/Backend-Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white)](https://nodejs.org)
+[![Frontend Status](https://img.shields.io/badge/Frontend-React-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://reactjs.org)
+[![Algorithm](https://img.shields.io/badge/Algorithm-Graph--Theory-FF6B6B?style=for-the-badge&logo=graph-theory&logoColor=white)](https://en.wikipedia.org/wiki/Graph_theory)
+[![License](https://img.shields.io/badge/License-MIT-4169E1?style=for-the-badge)](https://opensource.org/licenses/MIT)
 
-### Project Overview:
+---
 
-RIFT EYE is an intelligent financial fraud detection engine designed to uncover:
-•⁠  ⁠Suspicious accounts
-•⁠  ⁠Fraud rings
-•⁠  ⁠Smurfing patterns
-•⁠  ⁠Circular money laundering cycles
-•⁠  ⁠Shell account chains
+**RIFT EYE** is a high-performance financial fraud detection engine architected to illuminate illicit money movement patterns. By treating transaction data as a complex directed graph, the system identifies fraud rings, money laundering cycles, and suspicious account clusters with surgical precision.
 
-The system models transaction data as a directed graph, applies graph-theoretic algorithms, and computes a dynamic suspicion score for each account.It is built to efficiently handle high-volume transaction datasets while maintaining structured and compliant outputs.
+[Live Dashboard](https://rift-hackathon-puce.vercel.app) • [API Documentation](#api-reference) • [Report Bug](https://github.com/mohitmudgil/p4/issues)
 
-### Key Features:
+</div>
 
-•⁠  ⁠Graph-based fraud modeling
-•⁠  ⁠Cycle detection for laundering rings
-•⁠  ⁠Bipartite-style detection for smurfing patterns
-•⁠  ⁠Chain detection for shell layering
-•⁠  ⁠Dynamic suspicion scoring
-•⁠  ⁠Strict JSON output (competition compliant)
-•⁠  ⁠Interactive frontend visualization
-•⁠  ⁠Downloadable analysis report
+## Core Detection Capabilities
 
-### System Architecture:
-                ┌──────────────────────┐
-                │   Transaction Data   │
-                └────────────┬─────────┘
-                             │
-                             ▼
-                    Graph Construction
-                             │
-                             ▼
-               ┌────────────────────────┐
-               │  Fraud Detection Engine|
-               ├────────────────────────┤
-               │  • Cycle Detection     │
-               │  • Smurf Detection     │
-               │  • Chain Detection     │
-               └────────────┬───────────┘
-                            |
-                            ▼
-                  Suspicion Score Engine
-                            │
-                            ▼
-                   JSON Output Formatter
-                            │
-                            ▼
-                    Frontend Dashboard
+The engine is engineered to detect sophisticated financial crimes that traditional rule-based systems often miss:
 
-### Tech Stack:
+*   **Fraud Rings**: Detection of circular money movement (Cycles).
+*   **Smurfing Patterns**: Identification of bipartite-style fund aggregation from multiple low-value sources.
+*   **Shell Chains**: Uncovering deep-layering transfers through intermediary accounts.
+*   **Dynamic Suspicion Scoring**: Real-time risk assessment based on behavioral topology.
 
-## Backend
-•⁠  ⁠Node.js
-•⁠  ⁠Express.js
-•⁠  ⁠Graph-based data structures
-•⁠  ⁠Custom fraud detection algorithms
+---
 
-## Frontend
-•⁠  ⁠React.js
-•⁠  ⁠D3.js (Graph Visualization)
-•⁠  ⁠TailwindCSS
+## System Architecture
 
-## Data Handling
+The following diagram illustrates the high-level data flow and processing pipeline of RIFT EYE.
 
-•⁠  ⁠JSON-based transaction ingestion
-•⁠  ⁠Optimized adjacency list representation
+```mermaid
+graph TD
+    A[Transaction Ingestion] -->|JSON/CSV| B(Graph Constructor)
+    B --> C{Fraud Detection Engine}
+    
+    subgraph "Analytics Core"
+    C --> D[Cycle Detection]
+    C --> E[Smurf Clustering]
+    C --> F[Chain Analysis]
+    end
+    
+    D --> G[Heuristic Weighting]
+    E --> G
+    F --> G
+    
+    G --> H[Suspicion Score Compute]
+    H --> I[JSON Formatter]
+    I --> J[React Dashboard]
+    I --> K[Downloadable Reports]
 
-## Algorithmic Approach
+    style A fill:#f9f,stroke:#333,stroke-width:2px
+    style C fill:#61DAFB,stroke:#333,stroke-width:4px
+    style H fill:#FF6B6B,stroke:#333,stroke-width:2px
+```
 
-RIFT EYE treats transactions as a directed graph:
-•⁠  ⁠Nodes represent accounts
-•⁠  ⁠Edges represent transactions
+---
 
-1.⁠ ⁠Cycle Detection (Fraud Rings)
-Used to detect circular money movement patterns.
-Approach:
-•⁠  ⁠Strongly Connected Components filtering
-•⁠  ⁠Modified Johnson-style cycle pruning
-•⁠  ⁠Time Complexity:
-O((V + E)(C + 1))
-Where:
-V = number of vertices
-E = number of edges
-C = number of cycles
-The implementation is optimized to prune trivial and duplicate sub-cycles.
+## Algorithmic Methodology
 
-2.⁠ ⁠Smurfing Detection (Bipartite-like Pattern)
-Detects multiple low-value accounts sending funds to a single aggregator.
-Approach:
-•⁠  ⁠In-degree concentration analysis
-•⁠  ⁠Threshold-based clustering
-•⁠  ⁠Time Complexity:
-O(V + E)
+RIFT EYE leverages graph-theoretic algorithms optimized for sparse transaction networks.
 
-3.⁠ ⁠Shell Chain Detection (Layering)
-Detects linear fund transfers across intermediary accounts.
-Approach:
-•⁠  ⁠DFS traversal with depth threshold
-•⁠  ⁠Path pruning
-•⁠  ⁠Time Complexity:
-O(V + E)
+### 1. Fraud Ring Detection (Johnson's Modified)
+Identifies circular transfers that indicate money laundering or credit circularity.
+- **Complexity**: $O((V + E)(C + 1))$
+- **Optimization**: Strongly Connected Components (SCC) filtering prior to cycle enumeration.
 
-### Suspicion Score Methodology:
+### 2. Smurfing Detection (Bipartite Clustering)
+Detects "many-to-one" transfer patterns typical of money mules.
+- **Approach**: In-degree concentration analysis and variance-based thresholding.
+- **Complexity**: $O(V + E)$
 
-Each account receives a normalized suspicion score between 0 and 100.
-## Score Components
-# Factor	                       Weight
-•⁠  ⁠Participation in Fraud Ring	   +40
-•⁠  ⁠Smurf Aggregation	             +25
-•⁠  ⁠Shell Chain Depth	             +20
-•⁠  ⁠High Transaction Frequency	     +10
-•⁠  ⁠Abnormal Flow Patterns	         +5
+### 3. Shell Layering (Depth Traversal)
+Identifies elongated paths of fund movement intended to obscure the source of wealth.
+- **Approach**: Pruned Depth-First Search with path-length constraints.
 
-# Formula
-Score = Σ (Pattern Weights)
-Score = min(100, Calculated Score)
+---
 
-Additional Notes:
-•⁠  ⁠Scores are rounded to one decimal precision.
-•⁠  ⁠Normal accounts typically remain near 0–10.
-•⁠  ⁠High-risk entities exceed 60.
+## Suspicion Score Methodology
 
-### Installation and Setup:
+Each account is assigned a risk coefficient (0-100) based on weighted topological features.
 
-1.⁠ ⁠Clone Repository
+```mermaid
+pie title Risk Weight Distribution
+    "Fraud Ring Participation" : 40
+    "Smurf Aggregation" : 25
+    "Shell Chain Depth" : 20
+    "Transaction Frequency" : 10
+    "Abnormal Flow" : 5
+```
 
-2.⁠ ⁠Install Dependencies
-npm install
+| Factor | Weight | Description |
+| :--- | :---: | :--- |
+| **Fraud Ring** | +40 | Participation in a detected circular graph topology |
+| **Smurf Aggregation** | +25 | High in-degree with low-value transaction variance |
+| **Shell Chain** | +20 | Part of a linear chain exceeding depth thresholds |
+| **Frequency** | +10 | Transaction velocity exceeding baseline stdev |
+| **Flow Pattern** | +5 | Deviations from expected temporal seasonality |
 
-3.⁠ ⁠Run Backend
-npm start
-Server runs on:
-http://localhost:5050
+---
 
-4.⁠ ⁠Run Frontend
-cd client
-npm install
-npm start
+## Tech Stack
 
-### Usage Instructions:
+### Infrastructure & Language
+- **Runtime**: Node.js (V8 Engine)
+- **Framework**: Express.js
+- **Frontend**: React.js 18+
 
-1.⁠ ⁠Upload transaction dataset in CSV format.
-2.⁠ ⁠Click "Analyze Transactions".
-3.⁠ ⁠Review:
-•⁠  ⁠Suspicious Accounts
-•⁠  ⁠Fraud Rings
-•⁠  ⁠Risk Scores
-4.⁠ ⁠Download the analysis JSON report.
-5.⁠ ⁠Explore the graph visualization interactively.
+### Data Architecture
+- **Structure**: Optimized Adjacency Lists
+- **Visualization**: D3.js & React-Force-Graph
+- **Styling**: TailwindCSS (Modern Glassmorphism Design)
 
-### Output Format:
+---
 
-The system outputs strictly formatted JSON:
-{
-  "suspicious_accounts": [...],
-  "fraud_rings": [...],
-  "summary": {
-    "total_accounts_analyzed": 0,
-    "suspicious_accounts_flagged": 0,
-    "fraud_rings_detected": 0,
-    "processing_time_seconds": 0.000
-  }
-}
-The output is fully compliant with the competition evaluation schema.
+## Installation & Deployment
 
-### Performance Characteristics:
+Prepare your environment to run RIFT EYE locally.
 
-•⁠  ⁠Handles large graphs efficiently
-•⁠  ⁠Optimized adjacency list memory usage
-•⁠  ⁠Cycle pruning prevents exponential explosion
-•⁠  ⁠Processing time scales near-linearly for sparse graphs
+### Prerequisites
+- Node.js >= 16.x
+- npm >= 8.x
 
-### Known Limitations:
+### Steps
 
-•⁠  ⁠Extremely dense graphs may increase cycle detection cost
-•⁠  ⁠Threshold-based scoring may require tuning for different datasets
-•⁠  ⁠Does not include machine learning-based anomaly detection
-•⁠  ⁠No real-time streaming ingestion (batch processing only)
-•⁠  ⁠Does not use additional contextual metadata (e.g., KYC, geographic data).
-•⁠  ⁠Fixed thresholds may require tuning for different datasets.
+1. **Clone and Install**
+   ```bash
+   git clone https://github.com/mohitmudgil/p4.git
+   cd p4
+   npm install
+   ```
 
-### Future Improvements:
+2. **Initialize Server**
+   ```bash
+   npm start
+   ```
+   *The backend will be available at `http://localhost:5050`*
 
-•⁠  ⁠Machine learning-based anomaly scoring
-•⁠  ⁠Real-time Kafka streaming integration
-•⁠  ⁠Risk explanation module
-•⁠  ⁠Advanced false-positive filtering
-•⁠  ⁠Adaptive dynamic weight learning
+3. **Initialize Frontend**
+   ```bash
+   cd client
+   npm install
+   npm start
+   ```
+   *The dashboard will be available at `http://localhost:3000`*
 
-### Team Members:
+---
 
-Yash Saini – System Design
-Mohit Mudgil – Full Stack Developer
-Sofi – Full Stack Developer
-Tanika – UI/UX Designer
+## Performance Characteristics
+
+- **Linear Scalability**: Processing time scales near-linearly ($O(N)$) for typical sparse financial graphs.
+- **Memory Optimization**: Uses bitset-based visited tracking and adjacency list pruning to minimize heap usage.
+- **Concurrency**: Non-blocking asynchronous I/O for handling simultaneous analytics requests.
+
+---
+
+## Development Team
+
+<div align="left">
+
+- **Yash Saini** – System Design & Architecture
+- **Mohit Mudgil** – Core Engine & Full Stack Development
+- **Sofi** – Data Analytics & Full Stack
+- **Tanika** – UI Engineering & UX Strategy
+
+</div>
+
+---
+
+<div align="center">
+
+Built for the Financial Intelligence Hackathon | RIFT EYE © 2026
+
+</div>
